@@ -67,28 +67,30 @@ def cmd_exit_stage(self) -> None:
     state.exit_stage_trigger = True
     logger.info("Exit stage set")
 
-def place_actors(writes) -> None:
-    writes.append((0x25FB98, 0xff00.to_bytes(2, "big"), "ROM"))
-
 def apply_mods(writes) -> None:
-    #Enable Totem Spirit locations before Silva/Silver boss
-    writes.append(memory_locations.make_write(MemoryKeys.TOTEM_SPIRIT_LOCATION_MOD, 0))
     #Disable gaining vanilla items when picking up hp/sp upgrades
     writes.append(memory_locations.make_write(MemoryKeys.DISABLE_VANILLA_HP_SP_PICKUP, 0x7E6A))
     #Disable gaining vanilla items when picking up spirit slot upgrades
     writes.append(memory_locations.make_write(MemoryKeys.DISABLE_VANILLA_SPIRIT_SLOT_PICKUP, 0x7E6A))
     #Disable item pickup message
     writes.append(memory_locations.make_write(MemoryKeys.DISABLE_GROUNDED_PICKUP_MESSAGE, 0xDB0A))
-    #Disable random spirit splash effect
-    writes.append(memory_locations.make_write(MemoryKeys.DISABLE_SPIRIT_SPLASH, 0))
-    #Loaded message in map scroller
-    writes.append((0x267D40, b"Archipelago loaded successfully!", "ROM"))
     #Disable vanilla chest rewards by setting the reward count for each chest to one 10 yen coin
     #sometimes multiple can show up as the game uses multiple chests in one location for a chest
     #with different items
     for address in chest_addresses:
         writes.append((address, [0x01], "ROM"))
         writes.append((address+2, [0x00], "ROM"))
+    #Separate key collection from having the key, move collection status to bit 4
+    writes.append(memory_locations.make_write(MemoryKeys.KEY_COLLECTION_BIT_MOD, 8))
+    
+def apply_options(writes) -> None:
+    #Enable Totem Spirit locations before Silva/Silver boss
+    writes.append(memory_locations.make_write(MemoryKeys.TOTEM_SPIRIT_LOCATION_MOD_1, 0))
+    writes.append(memory_locations.make_write(MemoryKeys.TOTEM_SPIRIT_LOCATION_MOD_2, 0))
+    #Disable random spirit splash effect
+    writes.append(memory_locations.make_write(MemoryKeys.DISABLE_SPIRIT_SPLASH, 0))
+    #Loaded message in map scroller
+    writes.append((0x267D40, b"Archipelago loaded successfully!", "ROM"))
 
 class ShamanKingMasterOfSpiritsClient(BizHawkClient):
     game = Names.Game_Name
@@ -138,7 +140,7 @@ class ShamanKingMasterOfSpiritsClient(BizHawkClient):
         #TODO: Settings stuff
         #Implement mods
         apply_mods(writes)
-        #place_actors(writes)
+        apply_options(writes)
         
         await write(ctx.bizhawk_ctx, writes)
         

@@ -355,11 +355,13 @@ class MemoryKeys:
     
     ITEM_FLAGS = "item_flags"
 
-    TOTEM_SPIRIT_LOCATION_MOD = "totem_spirit_location_mod"
+    TOTEM_SPIRIT_LOCATION_MOD_1 = "totem_spirit_location_mod_1"
+    TOTEM_SPIRIT_LOCATION_MOD_2 = "totem_spirit_location_mod_2"
     DISABLE_SPIRIT_SPLASH = "disable_spirit_splash"
     DISABLE_VANILLA_HP_SP_PICKUP = "disable_vanilla_hp_sp_pickup"
     DISABLE_VANILLA_SPIRIT_SLOT_PICKUP = "disable_vanilla_spirit_slot_pickup"
     DISABLE_GROUNDED_PICKUP_MESSAGE = "disable_grounded_pickup_message"
+    KEY_COLLECTION_BIT_MOD = "key_collection_bit_mod"
 
 class ItemTypes:
     Attack_Upgrade = "Attack Upgrade"

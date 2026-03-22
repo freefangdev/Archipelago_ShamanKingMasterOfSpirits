@@ -594,11 +594,13 @@ class MemoryLocations:
             MemoryLocation(MemoryKeys.ITEM_FLAGS,                 0x1ea8,     905, MemoryDomainKeys.IWRAM),
 
             #Mods
-            MemoryLocation(MemoryKeys.TOTEM_SPIRIT_LOCATION_MOD,  0x535e,     2, MemoryDomainKeys.ROM),
+            MemoryLocation(MemoryKeys.TOTEM_SPIRIT_LOCATION_MOD_1, 0x535e, 2, MemoryDomainKeys.ROM),
+            MemoryLocation(MemoryKeys.TOTEM_SPIRIT_LOCATION_MOD_2, 0x536c, 2, MemoryDomainKeys.ROM),
             MemoryLocation(MemoryKeys.DISABLE_SPIRIT_SPLASH,      0x16422,    4, MemoryDomainKeys.ROM),
             MemoryLocation(MemoryKeys.DISABLE_VANILLA_HP_SP_PICKUP,      0x7c74,    2, MemoryDomainKeys.ROM),
             MemoryLocation(MemoryKeys.DISABLE_VANILLA_SPIRIT_SLOT_PICKUP,      0x7c7c,    2, MemoryDomainKeys.ROM),
             MemoryLocation(MemoryKeys.DISABLE_GROUNDED_PICKUP_MESSAGE,      0x6544,    2, MemoryDomainKeys.ROM),
+            MemoryLocation(MemoryKeys.KEY_COLLECTION_BIT_MOD,      0x17000,    1, MemoryDomainKeys.ROM),
         ]
 
         # Create lookup dictionary for easy access
