@@ -128,18 +128,18 @@ class BossData:
         self.originalReward = original_reward
 
 bossData = [
-    BossData(Names.Boss,              lvl.EC4, [Names.Tome_Page, Names.Tokageroh]),
-    BossData(Names.Ryo_Boss,          lvl.NF4, [Names.Tome_Page, Names.Corey]),
-    BossData(Names.Trey_Boss,         lvl.WC6, [Names.Tome_Page, Names.Eliza]),
-    BossData(Names.Eliza_Boss,        lvl.SM5, [Names.Tome_Page]),#spirits active across the map
-    BossData(Names.Silva_Boss,        lvl.JR6, [Names.Tome_Page, Names.Mic]),
-    BossData(Names.Joco_Boss,         lvl.TG3, [Names.Tome_Page, Names.Lee_Pai_Long]),
-    BossData(Names.Lee_Pai_Long_Boss, lvl.TG6, [Names.Tome_Page, Names.Bason]),
-    BossData(Names.Len_Tao_Boss,      lvl.TG8, [Names.Tome_Page, Names.Grand_Tao_Dragon]),
-    BossData(Names.En_Tao_Boss,       lvl.IA3, [Names.Tome_Page, Names.Chloe]),
-    BossData(Names.Lyzerg_Boss,       lvl.IA5, [Names.Tome_Page, Names.Michael]),
-    BossData(Names.Michael_Boss,      lvl.IL3, [Names.Tome_Page]),
-    BossData(Names.Magister_Boss,     lvl.IL3, []),
+    BossData(Names.Ryo_Boss,          lvl.EC4, [Names.Tome_Page, Names.Tokageroh]),
+    BossData(Names.Trey_Boss,         lvl.NF4, [Names.Tome_Page, Names.Corey]),
+    BossData(Names.Eliza_Boss,        lvl.WC6, [Names.Tome_Page, Names.Eliza]),
+    BossData(Names.Silva_Boss,        lvl.SM5, [Names.Tome_Page]),#spirits active across the map
+    BossData(Names.Joco_Boss,         lvl.JR6, [Names.Tome_Page, Names.Mic]),
+    BossData(Names.Lee_Pai_Long_Boss, lvl.TG3, [Names.Tome_Page, Names.Lee_Pai_Long]),
+    BossData(Names.Len_Tao_Boss,      lvl.TG6, [Names.Tome_Page, Names.Bason]),
+    BossData(Names.En_Tao_Boss,       lvl.TG8, [Names.Tome_Page, Names.Grand_Tao_Dragon]),
+    BossData(Names.Lyzerg_Boss,       lvl.IA3, [Names.Tome_Page, Names.Chloe]),
+    BossData(Names.Michael_Boss,      lvl.IA5, [Names.Tome_Page, Names.Michael]),
+    BossData(Names.Magister_Boss,     lvl.IL3, [Names.Tome_Page]),
+    BossData(Names.Mephias_Boss,      lvl.IL3, []),
 ]
 
 class EventData:
@@ -151,7 +151,8 @@ class EventData:
         self.originalReward = original_reward
         
 eventData = [
-EventData(Names.Light_Sword_Event,           lvl.Inn, "Boss",    Names.Eliza_Boss,   Names.Light_Sword),
+    EventData(Names.Intro,                   lvl.Inn, None,      None,    Names.Amidamaru),
+    EventData(Names.Light_Sword_Event,       lvl.Inn, "Boss",    Names.Eliza_Boss,   Names.Light_Sword),
     EventData(Names.Shikigami_Event,         lvl.NF6, None,      None,    [Names.Shikigami, Names.Tome_Page]),
     EventData(Names.Ponchi_and_Konchi_Event, lvl.WC8, None,      None,    [Names.Ponchi, Names.Konchi]),
     EventData(Names.Mosuke_Event,            lvl.WC9, None,      None,     Names.Mosuke),
@@ -173,7 +174,7 @@ class SpiritData:
         self.boss = boss
         
 spiritData = [
-    SpiritData(1,  Names.Amidamaru,        25,      ItemClassification.useful           ),
+    SpiritData(1,  Names.Amidamaru,        25,      ItemClassification.useful,          event = Names.Intro),
     SpiritData(2,  Names.Mosuke,           None,    ItemClassification.useful,          event = Names.Mosuke_Event),
     SpiritData(3,  Names.Tokageroh,        None,    ItemClassification.progression,     boss = Names.Ryo_Boss),
     SpiritData(4,  Names.Corey,            20,      ItemClassification.progression,     boss = Names.Trey_Boss),
@@ -592,15 +593,23 @@ class MemoryLocations:
 
             #Flags
             MemoryLocation(MemoryKeys.ITEM_FLAGS,                 0x1ea8,     905, MemoryDomainKeys.IWRAM),
+            MemoryLocation(MemoryKeys.KEY_FLAGS,                  0x1dde,     87, MemoryDomainKeys.IWRAM),
+            MemoryLocation(MemoryKeys.SPIRIT_FLAGS,               0x232c,     9, MemoryDomainKeys.IWRAM), #Originally from 0x235b
 
             #Mods
-            MemoryLocation(MemoryKeys.TOTEM_SPIRIT_LOCATION_MOD_1, 0x535e, 2, MemoryDomainKeys.ROM),
-            MemoryLocation(MemoryKeys.TOTEM_SPIRIT_LOCATION_MOD_2, 0x536c, 2, MemoryDomainKeys.ROM),
-            MemoryLocation(MemoryKeys.DISABLE_SPIRIT_SPLASH,      0x16422,    4, MemoryDomainKeys.ROM),
-            MemoryLocation(MemoryKeys.DISABLE_VANILLA_HP_SP_PICKUP,      0x7c74,    2, MemoryDomainKeys.ROM),
-            MemoryLocation(MemoryKeys.DISABLE_VANILLA_SPIRIT_SLOT_PICKUP,      0x7c7c,    2, MemoryDomainKeys.ROM),
-            MemoryLocation(MemoryKeys.DISABLE_GROUNDED_PICKUP_MESSAGE,      0x6544,    2, MemoryDomainKeys.ROM),
-            MemoryLocation(MemoryKeys.KEY_COLLECTION_BIT_MOD,      0x17000,    1, MemoryDomainKeys.ROM),
+            MemoryLocation(MemoryKeys.TOTEM_SPIRIT_LOCATION_MOD_1,          0x535e,     2, MemoryDomainKeys.ROM),
+            MemoryLocation(MemoryKeys.TOTEM_SPIRIT_LOCATION_MOD_2,          0x536c,     2, MemoryDomainKeys.ROM),
+            MemoryLocation(MemoryKeys.DISABLE_SPIRIT_SPLASH,                0x16422,    4, MemoryDomainKeys.ROM),
+            MemoryLocation(MemoryKeys.DISABLE_VANILLA_HP_SP_PICKUP,         0x7c74,     2, MemoryDomainKeys.ROM),
+            MemoryLocation(MemoryKeys.DISABLE_VANILLA_SPIRIT_SLOT_PICKUP,   0x7c7c,     2, MemoryDomainKeys.ROM),
+            MemoryLocation(MemoryKeys.DISABLE_GROUNDED_PICKUP_MESSAGE,      0x6544,     2, MemoryDomainKeys.ROM),
+            MemoryLocation(MemoryKeys.KEY_COLLECTION_BIT_MOD,               0x17000,    1, MemoryDomainKeys.ROM),
+
+            MemoryLocation(MemoryKeys.SPIRIT_FLAG_LOCATION_REGULAR_MOD,        0x8464,  1, MemoryDomainKeys.ROM),
+            MemoryLocation(MemoryKeys.SPIRIT_FLAG_LOCATION_ENEMY_DROP_MOD,     0x6330,  1, MemoryDomainKeys.ROM),
+            MemoryLocation(MemoryKeys.SPIRIT_FLAG_LOCATION_SPIRIT_TOTEM_MOD,   0x53a0,  1, MemoryDomainKeys.ROM),
+            MemoryLocation(MemoryKeys.SPIRIT_FLAG_LOCATION_CUTSCENE_MOD,       0x8724,  1, MemoryDomainKeys.ROM),
+            MemoryLocation(MemoryKeys.SPIRIT_FLAG_LOCATION_SAVE_LOAD_MOD,      0x1fc70, 1, MemoryDomainKeys.ROM),
         ]
 
         # Create lookup dictionary for easy access
@@ -658,7 +667,7 @@ chest_addresses = [
 ]
 
 #Todo: Fact-check flags
-collectible_flags = [
+collectible_location_flags = [
     FlagData(f"{Names.Eastern_Cemetery} {Names.Chest} 1",0x1ea8, 0x1ea8 - 0x1ea8, 0, Names.Chest), 
     FlagData(f"{Names.Eastern_Cemetery} {Names.Chest} 2",0x1ea8, 0x1ea8 - 0x1ea8, 1, Names.Chest), 
     FlagData(f"{Names.Eastern_Cemetery} {Names.Chest} 3",0x1ea8, 0x1ea8 - 0x1ea8, 2, Names.Chest), 
@@ -887,4 +896,87 @@ collectible_flags = [
     FlagData(f"{Names.Ice_Lands} {Names.Chest} 19",0x2230, 0x2230 - 0x1ea8, 4, Names.Chest), 
     FlagData(f"{Names.Ice_Lands} {Names.Chest} 20",0x2230, 0x2230 - 0x1ea8, 5, Names.Chest), 
     FlagData(f"{Names.Ice_Lands} {Names.Chest} 21",0x2230, 0x2230 - 0x1ea8, 6, Names.Chest),
+]
+
+key_location_flags = [
+    FlagData(f"{Names.Western_Cemetery} 1 {Names.Key}", 0x1df2, 0x1df2 - 0x1dde, 4, Names.Key),
+    FlagData(f"{Names.Western_Cemetery} 5 {Names.Key}", 0x1df6, 0x1df6 - 0x1dde, 4, Names.Key),
+    FlagData(f"{Names.Southern_Mountains} 1 {Names.Key}", 0x1dfc, 0x1dfc - 0x1dde, 4, Names.Key),
+    FlagData(f"{Names.Southern_Mountains} 2 {Names.Key}", 0x1dfd, 0x1dfd - 0x1dde, 4, Names.Key),
+    FlagData(f"{Names.Southern_Mountains} 3 {Names.Key}", 0x1dfe, 0x1dfe - 0x1dde, 4, Names.Key),
+    FlagData(f"{Names.Jungle_Ruins} 2 {Names.Key}", 0x1e07, 0x1e07 - 0x1dde, 4, Names.Key),
+    FlagData(f"{Names.Tao_Grounds} 1 {Names.Key}", 0x1e10, 0x1e10 - 0x1dde, 4, Names.Key),
+    FlagData(f"{Names.Tao_Grounds} 2 {Names.Key}", 0x1e11, 0x1e11 - 0x1dde, 4, Names.Key),
+    FlagData(f"{Names.Industrial_Area} 2 {Names.Key}", 0x1e1b, 0x1e1b - 0x1dde, 4, Names.Key),
+]
+
+spirit_location_flags = [
+    FlagData(f"{Names.Inn} {Names.Intro} {Names.Amidamaru}",        0x232c, 0, 1),
+    FlagData(f"{Names.Mosuke_Event} {Names.Mosuke}",                0x232c, 0, 3),
+    FlagData(f"{lvl.EC4} {Names.Ryo_Boss} {Names.Tokageroh}",                 0x232c, 0, 5),
+    FlagData(f"{lvl.NF4} {Names.Trey_Boss} {Names.Corey}",                    0x232c, 0, 6),
+    FlagData(f"{lvl.WC6} {Names.Eliza_Boss} {Names.Eliza}",                   0x232c, 0, 7),
+    FlagData(f"{lvl.WC8} {Names.Silver_Shield}",                    0x232d, 1, 0),
+    FlagData(f"{lvl.SM7} {Names.Silver_Tail}",                      0x232d, 1, 1),
+    FlagData(f"{lvl.WC1} {Names.Silver_Wing}",                      0x232d, 1, 2),
+    FlagData(f"{lvl.NF2} {Names.Silver_Horn}",                      0x232d, 1, 3),
+    FlagData(f"{lvl.EC4} {Names.Silver_Rod}",                       0x232d, 1, 4),
+    FlagData(f"{lvl.JR6} {Names.Joco_Boss} {Names.Mic}",                      0x232d, 1, 6),
+    FlagData(f"{lvl.TG3} {Names.Lee_Pai_Long_Boss} {Names.Lee_Pai_Long}",     0x232d, 1, 7),
+    FlagData(f"{lvl.TG6} {Names.Len_Tao_Boss} {Names.Bason}",                 0x232e, 2, 0),
+    FlagData(f"{lvl.TG8} {Names.En_Tao_Boss} {Names.Grand_Tao_Dragon}",       0x232e, 2, 2),
+    FlagData(f"{lvl.IA3} {Names.Lyzerg_Boss} {Names.Chloe}",                  0x232e, 2, 3),
+    FlagData(f"{lvl.IA5} {Names.Michael_Boss} {Names.Michael}",               0x232e, 2, 4),
+    FlagData(f"{lvl.EC3} {Names.Kanta}",                            0x232e, 2, 6),
+    FlagData(f"{lvl.EC2} {Names.Gussy_Kenji}",                      0x232e, 2, 7),
+    FlagData(f"{lvl.NF7} {Names.Tamegoroh}",                        0x232f, 3, 0),
+    FlagData(f"{lvl.NF6} {Names.Shikigami_Event} {Names.Shikigami}",          0x232f, 3, 1),
+    FlagData(f"{lvl.WC3} {Names.Frankensteiny}",                    0x232f, 3, 2),
+    FlagData(f"{lvl.WC8} {Names.Ponchi_and_Konchi_Event} {Names.Ponchi}",     0x232f, 3, 3),
+    FlagData(f"{lvl.WC8} {Names.Ponchi_and_Konchi_Event} {Names.Konchi}",     0x232f, 3, 4),
+    FlagData(f"{lvl.EC3} {Names.Chimi_Moryo}",                      0x232f, 3, 5),
+    FlagData(f"{lvl.TG4} {Names.Shaolin}",                          0x232f, 3, 6),
+    FlagData(f"{lvl.TG7} {Names.Black_Raven}",                      0x232f, 3, 7),
+    FlagData(f"{lvl.TG9} {Names.Tao_the_Great}",                    0x2330, 4, 0),
+    FlagData(f"{lvl.NF4} {Names.Ian}",                              0x2330, 4, 1),
+    FlagData(f"{lvl.NF1} {Names.Nizba}",                            0x2330, 4, 2),
+    FlagData(f"{lvl.WC1} {Names.Dreisa}",                           0x2330, 4, 3),
+    FlagData(f"{lvl.WC4} {Names.Yopia}",                            0x2330, 4, 4),
+    FlagData(f"{lvl.NF3} {Names.Badbh}",                            0x2330, 4, 6),
+    FlagData(f"{lvl.NF3} {Names.Vodianoi}",                         0x2330, 4, 7),
+    FlagData(f"{lvl.NF3} {Names.Deht_the_Viking}",                  0x2331, 5, 0),
+    FlagData(f"{lvl.TG3} {Names.Gororo}",                           0x2331, 5, 1),
+    FlagData(f"{lvl.IL2} {Names.Zenki_and_Kohki_Event} {Names.Zenki}",        0x2331, 5, 2),
+    FlagData(f"{lvl.IL2} {Names.Zenki_and_Kohki_Event} {Names.Kohki}",        0x2331, 5, 3),
+    FlagData(f"{lvl.IL2} {Names.Golem}",                            0x2331, 5, 4),
+    FlagData(f"{lvl.JR5} {Names.Orona}",                            0x2331, 5, 5),
+    FlagData(f"{lvl.IL1} {Names.Pascal_Avaf}",                      0x2331, 5, 6),
+    FlagData(f"{lvl.SM3} {Names.Yamagami}",                         0x2332, 6, 0),
+    FlagData(f"{lvl.TG8} {Names.Gundari}",                          0x2332, 6, 1),
+    FlagData(f"{lvl.TG3} {Names.Raphael}",                          0x2332, 6, 2),
+    FlagData(f"{lvl.SM3} {Names.Gabriel}",                          0x2332, 6, 3),
+    FlagData(f"{lvl.IA2} {Names.Uriel}",                            0x2332, 6, 4),
+    FlagData(f"{lvl.IA2} {Names.Metatoron}",                        0x2332, 6, 5),
+    FlagData(f"{lvl.IA4} {Names.Sariel}",                           0x2332, 6, 6),
+    FlagData(f"{lvl.IA4} {Names.Remiel}",                           0x2332, 6, 7),
+    FlagData(f"{Names.Inn} {Names.Mash_Event} {Names.Mash}",                    0x2333, 7, 0),
+    FlagData(f"{lvl.TG4} {Names.Blaumro}",                          0x2333, 7, 1),
+    FlagData(f"{lvl.IA1} {Names.Footballer}",                       0x2333, 7, 2),
+    FlagData(f"{lvl.IA1} {Names.Shion_Shion}",                      0x2333, 7, 3),
+    FlagData(f"{lvl.IA1} {Names.Blocks}",                           0x2333, 7, 4),
+    FlagData(f"{lvl.SM4} {Names.Jen}",                              0x2333, 7, 5),
+    FlagData(f"{lvl.SM3} {Names.Ashcroft}",                         0x2333, 7, 6),
+    FlagData(f"{lvl.JR4} {Names.Jack}",                             0x2333, 7, 7),
+    FlagData(f"{lvl.JR1} or {lvl.JR4} {Names.Chuck}",               0x2334, 8, 0),
+    FlagData(f"{lvl.SM7} {Names.Carlos_and_Joao}",                  0x2334, 8, 1),
+    FlagData(f"{lvl.JR5} {Names.Antonio}",                          0x2334, 8, 2),
+    FlagData(f"{lvl.SM3} {Names.Jose}",                             0x2334, 8, 3),
+    FlagData(f"{lvl.TG3} {Names.Pancho}",                           0x2334, 8, 4),
+    FlagData(f"{lvl.TG1} {Names.Zapata}",                           0x2334, 8, 5),
+    FlagData(f"{lvl.IA4} {Names.Miguel}",                           0x2334, 8, 6),
+    FlagData(f"{lvl.EC4} {Names.Magnescope}",                       0x2335, 9, 0),
+    FlagData(f"{lvl.IL1} {Names.Mama}",                             0x2335, 9, 1),
+    FlagData(f"{lvl.IL1} {Names.Cifer}",                            0x2335, 9, 2),
+    FlagData(f"{lvl.IL3} {Names.Spirit_of_Fire_Event} {Names.Spirit_of_Fire}",0x2335, 9, 3),
+    FlagData(f"{lvl.IL2} {Names.Matamune}",                         0x2335, 9, 4),
 ]

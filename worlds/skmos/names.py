@@ -354,6 +354,8 @@ class MemoryKeys:
     DEFENCE_SLOT = "defence_slot"
     
     ITEM_FLAGS = "item_flags"
+    KEY_FLAGS = "key_flags"
+    SPIRIT_FLAGS = "spirit_flags"
 
     TOTEM_SPIRIT_LOCATION_MOD_1 = "totem_spirit_location_mod_1"
     TOTEM_SPIRIT_LOCATION_MOD_2 = "totem_spirit_location_mod_2"
@@ -362,6 +364,11 @@ class MemoryKeys:
     DISABLE_VANILLA_SPIRIT_SLOT_PICKUP = "disable_vanilla_spirit_slot_pickup"
     DISABLE_GROUNDED_PICKUP_MESSAGE = "disable_grounded_pickup_message"
     KEY_COLLECTION_BIT_MOD = "key_collection_bit_mod"
+    SPIRIT_FLAG_LOCATION_REGULAR_MOD = "spirit_flag_location_regular_mod"
+    SPIRIT_FLAG_LOCATION_ENEMY_DROP_MOD = "spirit_flag_location_enemy_drop_mod"
+    SPIRIT_FLAG_LOCATION_SPIRIT_TOTEM_MOD = "spirit_flag_location_spirit_totem_mod"
+    SPIRIT_FLAG_LOCATION_CUTSCENE_MOD = "spirit_flag_location_cutscene_mod"
+    SPIRIT_FLAG_LOCATION_SAVE_LOAD_MOD = "spirit_flag_location_save_load_mod"
 
 class ItemTypes:
     Attack_Upgrade = "Attack Upgrade"
@@ -381,3 +388,11 @@ class Options:
     Group_Utility_Spirits = "group_utility_spirits"
     Disable_Splash_Art_When_Using_Spirits = "disable_splash_art_when_using_spirits"
     Trap_Chance = "trap_chance"
+    
+spirit_flag_mods = [
+    MemoryKeys.SPIRIT_FLAG_LOCATION_REGULAR_MOD,
+    MemoryKeys.SPIRIT_FLAG_LOCATION_ENEMY_DROP_MOD,
+    MemoryKeys.SPIRIT_FLAG_LOCATION_SPIRIT_TOTEM_MOD,
+    MemoryKeys.SPIRIT_FLAG_LOCATION_CUTSCENE_MOD,
+    MemoryKeys.SPIRIT_FLAG_LOCATION_SAVE_LOAD_MOD, 
+]

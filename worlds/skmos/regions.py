@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 from BaseClasses import Entrance, Region
 from .names import Names, AreaLevels
-from .game_data import collectible_flags, levels
+from .game_data import collectible_location_flags, levels
 
 if TYPE_CHECKING:
     from .skmosworld import ShamanKingMasterOfSpiritsWorld

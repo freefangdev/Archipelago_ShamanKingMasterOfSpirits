@@ -2,9 +2,9 @@
 from typing import TYPE_CHECKING, Dict, Any
 from worlds._bizhawk.client import BizHawkClient
 from worlds._bizhawk import RequestFailedError, read, write
-from .game_data import traps, collectible_flags, spiritSlotFlagDict, spiritCollectionFlagDict, itemDataDict, ItemData, MemoryLocations, FlagData, weapon_progression_dict, defence_progression_dict, SpiritData, itemData, chest_addresses
+from .game_data import traps, collectible_location_flags, key_location_flags, spirit_location_flags, spiritSlotFlagDict, spiritCollectionFlagDict, itemDataDict, ItemData, MemoryLocations, FlagData, weapon_progression_dict, defence_progression_dict, SpiritData, itemData, chest_addresses
 from .items import ITEM_ID_TO_ITEM
-from .names import ItemTypes, MemoryKeys, MemoryDomainKeys, Names, Options
+from .names import ItemTypes, MemoryKeys, MemoryDomainKeys, Names, Options, spirit_flag_mods
 from .locations import LOCATION_NAME_TO_ID
 
 if TYPE_CHECKING:
@@ -17,7 +17,7 @@ max_bag_slots = 10
 
 class State:
     def __init__(self):
-        self.death_trigger = False
+        self.death_trigger = False #Todo Death link
         self.exit_stage_trigger = False
         self.trap_duration = 0x02FF
         self.traps_to_trigger:list[str] = []
@@ -84,7 +84,10 @@ def apply_mods(writes) -> None:
         writes.append((address, [0x01], "ROM"))
         writes.append((address+2, [0x00], "ROM"))
     #Separate key collection from having the key, move collection status to bit 4
-    writes.append(memory_locations.make_write(MemoryKeys.KEY_COLLECTION_BIT_MOD, 8))
+    writes.append(memory_locations.make_write(MemoryKeys.KEY_COLLECTION_BIT_MOD, 16))
+    #Change location spirit collection writes from 235b to 232c in order to separate spirit location to spirit in inventory  
+    for spirit_flag_mod in spirit_flag_mods:
+        writes.append(memory_locations.make_write(spirit_flag_mod, 60))
     #Loaded message in map scroller
     writes.append((0x267D40, b"Archipelago loaded successfully!", "ROM"))
     
@@ -178,7 +181,9 @@ class ShamanKingMasterOfSpiritsClient(BizHawkClient):
          spirit_slot_bytes,
          weapon_slot_bytes,
          defence_slot_bytes,
-         item_flags_bytes,) \
+         item_flags_bytes,
+         key_flags_bytes,
+         spirit_flags_bytes,) \
             = await read(ctx.bizhawk_ctx, [
             memory_locations.get_entry(MemoryKeys.CURRENT_SCREEN),
             memory_locations.get_entry(MemoryKeys.YOH_OBJECT),
@@ -199,6 +204,8 @@ class ShamanKingMasterOfSpiritsClient(BizHawkClient):
             memory_locations.get_entry(MemoryKeys.WEAPON_SLOT),
             memory_locations.get_entry(MemoryKeys.DEFENCE_SLOT),
             memory_locations.get_entry(MemoryKeys.ITEM_FLAGS),
+            memory_locations.get_entry(MemoryKeys.KEY_FLAGS),
+            memory_locations.get_entry(MemoryKeys.SPIRIT_FLAGS),
         ])
         
         writes = []
@@ -293,10 +300,27 @@ class ShamanKingMasterOfSpiritsClient(BizHawkClient):
         
         new_checks = []
 
-        for collection_location in collectible_flags:
+        #Handle chest and other in-level collectible checks
+        for collection_location in collectible_location_flags:
             location_id = LOCATION_NAME_TO_ID[collection_location.name]
             if location_id not in ctx.checked_locations:
                 is_checked = self.is_bit_set(item_flags_bytes[collection_location.address_offset], collection_location.bit)
+                if is_checked:
+                    new_checks.append(location_id)
+
+        #Handle key checks
+        for key_location in key_location_flags:
+            location_id = LOCATION_NAME_TO_ID[key_location.name]
+            if location_id not in ctx.checked_locations:
+                is_checked = self.is_bit_set(key_flags_bytes[key_location.address_offset], key_location.bit)
+                if is_checked:
+                    new_checks.append(location_id)
+                    
+        #Handle spirit checks
+        for spirit_location in spirit_location_flags:
+            location_id = LOCATION_NAME_TO_ID[spirit_location.name]
+            if location_id not in ctx.checked_locations:
+                is_checked = self.is_bit_set(spirit_flags_bytes[spirit_location.address_offset], spirit_location.bit)
                 if is_checked:
                     new_checks.append(location_id)
 

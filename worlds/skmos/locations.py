@@ -2,15 +2,16 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from BaseClasses import ItemClassification, Location
-from .game_data import spiritData, itemData, collectible_flags
+from .game_data import spiritData, itemData, collectible_location_flags, key_location_flags, spirit_location_flags
 from .names import Names
 
 if TYPE_CHECKING:
     from .skmosworld import ShamanKingMasterOfSpiritsWorld
 
 item_table = spiritData + itemData
+location_table = collectible_location_flags + key_location_flags + spirit_location_flags
 
-LOCATION_NAME_TO_ID = {location.name: i+1 for i, location in enumerate(collectible_flags)}
+LOCATION_NAME_TO_ID = {location.name: i+1 for i, location in enumerate(location_table)}
 
 class ShamanKingMasterOfSpiritsLocation(Location):
     game = Names.Game_Name
@@ -42,7 +43,7 @@ def create_regular_locations(world: ShamanKingMasterOfSpiritsWorld) -> None:
     regions = world.get_regions()
     
     for region in regions:
-        region.add_locations(get_location_names_with_ids([flag.name for flag in collectible_flags if flag.name.startswith(region.name)]), ShamanKingMasterOfSpiritsLocation)
+        region.add_locations(get_location_names_with_ids([flag.name for flag in location_table if flag.name.startswith(region.name)]), ShamanKingMasterOfSpiritsLocation)
 
     # One way to create locations is by just creating them directly via their constructor.
     #bottom_left_chest = ShamanKingMasterOfSpiritsLocation(
