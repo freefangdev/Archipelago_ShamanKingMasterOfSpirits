@@ -4,7 +4,7 @@ from worlds._bizhawk.client import BizHawkClient
 from worlds._bizhawk import RequestFailedError, read, write
 from .game_data import traps, collectible_flags, spiritSlotFlagDict, spiritCollectionFlagDict, itemDataDict, ItemData, MemoryLocations, FlagData, weapon_progression_dict, defence_progression_dict, SpiritData, itemData, chest_addresses
 from .items import ITEM_ID_TO_ITEM
-from .names import ItemTypes, MemoryKeys, MemoryDomainKeys, Names
+from .names import ItemTypes, MemoryKeys, MemoryDomainKeys, Names, Options
 from .locations import LOCATION_NAME_TO_ID
 
 if TYPE_CHECKING:
@@ -19,9 +19,8 @@ class State:
     def __init__(self):
         self.death_trigger = False
         self.exit_stage_trigger = False
-        self.trap_trigger = False
-        self.trap_type = 0x0200
         self.trap_duration = 0x02FF
+        self.traps_to_trigger:list[str] = []
         self.receive_amount:int = 0
         self.yen_to_add:int = 0
         self.magatama_to_add:int = 0
@@ -45,14 +44,13 @@ def cmd_trigger_trap(self, trap_name: str, trap_length: str) -> None:
     global state
     
     if trap_name is not None and trap_name in traps:
-        state.trap_type = traps[trap_name]
+        state.traps_to_trigger.append(trap_name)
         logger.info(f"Set trap type {trap_name}")
         
     if trap_length is not None:
         state.trap_duration = min(int(trap_length), int(0xFFFF))
         logger.info("Set trap length")
 
-    state.trap_trigger = True
     logger.info("Trap set")
 
 def cmd_trigger_death(self) -> None:
@@ -157,6 +155,9 @@ class ShamanKingMasterOfSpiritsClient(BizHawkClient):
     
     async def game_watcher(self, ctx: "BizHawkClientContext") -> None:
         from .items import item_table
+        if ctx.server is None or ctx.server.socket.closed or ctx.slot_data is None:
+            return
+        
         global state
         
         (screen_type_bytes, 
@@ -205,14 +206,7 @@ class ShamanKingMasterOfSpiritsClient(BizHawkClient):
         yoh_object_pointer_iwram = int.from_bytes(yoh_object_pointer_bytes, "little") - 0x3000000
         
         #Only do while in the level
-        if screen_type_bytes[0] == 0x03: #Todo add check for cutscene state
-            if state.trap_trigger:
-                # Set status effect
-                writes.append((yoh_object_pointer_iwram + 0x3C, state.trap_type.to_bytes(2, "little"), MemoryDomainKeys.IWRAM))
-                # Set status effect time
-                writes.append((yoh_object_pointer_iwram + 0x66, state.trap_duration.to_bytes(2, "little"), MemoryDomainKeys.IWRAM))
-                state.trap_trigger = False
-                
+        if self.is_in_gameplay_state(screen_type_bytes): 
             if state.death_trigger:
                 #Set in-stage hp to zero
                 writes.append((0x3636, [0x00], MemoryDomainKeys.IWRAM))
@@ -260,7 +254,7 @@ class ShamanKingMasterOfSpiritsClient(BizHawkClient):
                             case Names.Skeleton:
                                 state.skeleton_to_add = state.skeleton_to_add + 1
                     case ItemTypes.Trap:
-                        logger.info('Traps are WIP') #Todo
+                        state.traps_to_trigger.append(item_received.name)
                     case _:
                         logger.info(f"{item_received.itemType} is not implemented!")
             else:
@@ -289,6 +283,9 @@ class ShamanKingMasterOfSpiritsClient(BizHawkClient):
         self.increment_memory_value(writes, MemoryKeys.ROCK_COUNT,      rocks_bytes,        state.rock_to_add,    99)
         self.increment_memory_value(writes, MemoryKeys.SKELETON_COUNT,  skeletons_bytes,    state.skeleton_to_add,99)
 
+        #Handle traps
+        self.trigger_traps(state.traps_to_trigger, writes, yoh_object_pointer_iwram, screen_type_bytes)
+
         await write(ctx.bizhawk_ctx, writes)
         
         state.reset()
@@ -305,8 +302,29 @@ class ShamanKingMasterOfSpiritsClient(BizHawkClient):
 
         for new_check_id in new_checks:
             ctx.locations_checked.add(new_check_id)
-            location = ctx.location_names.lookup_in_game(new_check_id)
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [new_check_id]}])
+
+    def trigger_traps(self, trap_names:list[str], writes: list[Any], yoh_object_pointer_iwram: int, screen_type_bytes: bytes):
+        global state
+        #Todo: Non-status traps
+        status_effect = 0
+        status_duration = 0
+        if self.is_in_gameplay_state(screen_type_bytes):
+            for trap_name in trap_names:
+                status_effect = status_effect & traps[trap_name]
+                status_duration = max(status_duration, state.trap_duration) #Todo: trap duration by type 
+                
+        if status_effect != 0:
+            # Set status effect
+            writes.append((yoh_object_pointer_iwram + 0x3C, status_effect.to_bytes(2, "little"),
+                           MemoryDomainKeys.IWRAM))
+            # Set status effect time
+            writes.append(
+                (yoh_object_pointer_iwram + 0x66, status_duration.to_bytes(2, "little"), MemoryDomainKeys.IWRAM))
+
+    @staticmethod
+    def is_in_gameplay_state(screen_type_bytes: bytes) -> bool:
+        return screen_type_bytes[0] == 0x03 #Todo add check for cutscene state
 
     @staticmethod #Todo add progressive equip updates
     def update_equipment_value(writes, memory_key:str, equipment_list, current_value_bytes:bytes, target_names:list[str]):
@@ -385,7 +403,7 @@ class ShamanKingMasterOfSpiritsClient(BizHawkClient):
             writes.append(memory_locations.make_write(MemoryKeys.HP, max_hp))
 
             # Update in-level health while inside a level
-            if screen_type_bytes[0] == 0x03:
+            if self.is_in_gameplay_state(screen_type_bytes):
                 writes.append((yoh_object_pointer_iwram + 0x6a, max_hp.to_bytes(2, "little"), MemoryDomainKeys.IWRAM))
         return magatama_and_tome_count
 
@@ -419,4 +437,5 @@ class ShamanKingMasterOfSpiritsClient(BizHawkClient):
 
     @staticmethod
     def is_bit_set(value: int, bit_position: int) -> bool:
-        return bool(value & (1 << bit_position))
+        return bool(value & (1 << bit_position))    
+        
