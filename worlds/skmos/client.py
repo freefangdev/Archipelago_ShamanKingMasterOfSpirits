@@ -66,7 +66,12 @@ def cmd_exit_stage(self) -> None:
     global state
     state.exit_stage_trigger = True
     logger.info("Exit stage set")
-
+    
+def cmd_slot_data(self):
+    """Prints slot data settings for the connected seed"""
+    for key in self.ctx.slot_data.keys():
+        self.output(str(key) + ": " + str(self.ctx.slot_data[key]))
+            
 def apply_mods(writes) -> None:
     #Disable gaining vanilla items when picking up hp/sp upgrades
     writes.append(memory_locations.make_write(MemoryKeys.DISABLE_VANILLA_HP_SP_PICKUP, 0x7E6A))
@@ -82,15 +87,18 @@ def apply_mods(writes) -> None:
         writes.append((address+2, [0x00], "ROM"))
     #Separate key collection from having the key, move collection status to bit 4
     writes.append(memory_locations.make_write(MemoryKeys.KEY_COLLECTION_BIT_MOD, 8))
-    
-def apply_options(writes) -> None:
-    #Enable Totem Spirit locations before Silva/Silver boss
-    writes.append(memory_locations.make_write(MemoryKeys.TOTEM_SPIRIT_LOCATION_MOD_1, 0))
-    writes.append(memory_locations.make_write(MemoryKeys.TOTEM_SPIRIT_LOCATION_MOD_2, 0))
-    #Disable random spirit splash effect
-    writes.append(memory_locations.make_write(MemoryKeys.DISABLE_SPIRIT_SPLASH, 0))
     #Loaded message in map scroller
     writes.append((0x267D40, b"Archipelago loaded successfully!", "ROM"))
+    
+def apply_options(writes, options) -> None:
+    if options[Options.Early_Totem_Spirit_Locations] == 1:
+        #Enable Totem Spirit locations before Silva/Silver boss
+        writes.append(memory_locations.make_write(MemoryKeys.TOTEM_SPIRIT_LOCATION_MOD_1, 0))
+        writes.append(memory_locations.make_write(MemoryKeys.TOTEM_SPIRIT_LOCATION_MOD_2, 0))
+        
+    if options[Options.Disable_Splash_Art_When_Using_Spirits] == 1:
+        #Disable random spirit splash effect
+        writes.append(memory_locations.make_write(MemoryKeys.DISABLE_SPIRIT_SPLASH, 0))
 
 class ShamanKingMasterOfSpiritsClient(BizHawkClient):
     game = Names.Game_Name
@@ -135,12 +143,13 @@ class ShamanKingMasterOfSpiritsClient(BizHawkClient):
         ctx.command_processor.commands["trap"] = cmd_trigger_trap
         ctx.command_processor.commands["kill"] = cmd_trigger_death
         ctx.command_processor.commands["exitstage"] = cmd_exit_stage
+        ctx.command_processor.commands["slotdata"] = cmd_slot_data
         
         writes = []
         #TODO: Settings stuff
         #Implement mods
         apply_mods(writes)
-        apply_options(writes)
+        apply_options(writes, ctx.slot_data)
         
         await write(ctx.bizhawk_ctx, writes)
         

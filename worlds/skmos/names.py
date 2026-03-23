@@ -375,3 +375,9 @@ class ItemTypes:
     Bag = "Bag"
     Consumable = "Consumable"
     Trap = "Trap"
+
+class Options:
+    Early_Totem_Spirit_Locations = "early_totem_spirit_locations"
+    Group_Utility_Spirits = "group_utility_spirits"
+    Disable_Splash_Art_When_Using_Spirits = "disable_splash_art_when_using_spirits"
+    Trap_Chance = "trap_chance"

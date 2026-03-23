@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from Options import Choice, OptionGroup, PerGameCommonOptions, Range, Toggle
+from .names import Options
 
 #Possible future options:
 #- Remove keys, open all doors
@@ -11,11 +12,10 @@ from Options import Choice, OptionGroup, PerGameCommonOptions, Range, Toggle
 #- Gotta cath em all goal 
 #- Start spirit slot count
 #- Gather all spirits for the cannon in one item
-#- Disable splash art when using spirits
 #- Allow cheat commands
 #- Monster progression trap
 #- Inventory weight expansion 5 - 10 (original) - 15 - 20 - 30?
-#- Unlock item slots
+#- Unlock bag item slots
 #- Convert excessive items for full price
 #- Disable Amidamaru rescue from pits, straight game over instead
     #Option 1: Usual behavior, get rescued
@@ -25,6 +25,9 @@ from Options import Choice, OptionGroup, PerGameCommonOptions, Range, Toggle
 #- Backdash as item
 #- Duck as item
 #- Progressive sword
+#- Optional death link toggle
+#- Soft logic option for power scaling
+#- Boss health scaling depending on order
 
 class DisableSplashArtWhenUsingSpirits(Toggle):
     """
@@ -78,7 +81,6 @@ class ShamanKingMasterOfSpiritsOptions(PerGameCommonOptions):
     trap_chance: TrapChance
     disable_splash_art_when_using_spirits: DisableSplashArtWhenUsingSpirits
 
-
 # If we want to group our options by similar type, we can do so as well. This looks nice on the website.
 option_groups = [
     OptionGroup(
@@ -99,15 +101,15 @@ option_groups = [
 
 option_presets = {
     "default": {
-        "early_totem_spirit_locations": True,
-        "group_utility_spirits": True,
-        "disable_splash_art_when_using_spirits": True,
-        "trap_chance": 0,
+        Options.Early_Totem_Spirit_Locations: True,
+        Options.Group_Utility_Spirits: True,
+        Options.Disable_Splash_Art_When_Using_Spirits: True,
+        Options.Trap_Chance: 0,
     },
     "purist": {
-        "early_totem_spirit_locations": False,
-        "group_utility_spirits": False,
-        "disable_splash_art_when_using_spirits": False,
-        "trap_chance": 0,
+        Options.Early_Totem_Spirit_Locations: False,
+        Options.Group_Utility_Spirits: False,
+        Options.Disable_Splash_Art_When_Using_Spirits: False,
+        Options.Trap_Chance: 0,
     },
 }

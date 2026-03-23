@@ -1,6 +1,6 @@
 ﻿from collections.abc import Mapping
 from typing import Any, Dict
-from .names import Names
+from .names import Names, Options
 
 # Imports of base Archipelago modules must be absolute.
 from worlds.AutoWorld import World
@@ -37,5 +37,8 @@ class ShamanKingMasterOfSpiritsWorld(World):
 
     def fill_slot_data(self) -> Mapping[str, Any]:
         return self.options.as_dict(
-            "group_utility_spirits"
+            Options.Early_Totem_Spirit_Locations,
+            Options.Group_Utility_Spirits,
+            Options.Disable_Splash_Art_When_Using_Spirits,
+            Options.Trap_Chance,
         )
