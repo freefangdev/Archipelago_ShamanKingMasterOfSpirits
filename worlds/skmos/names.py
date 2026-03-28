@@ -369,6 +369,7 @@ class MemoryKeys:
     SPIRIT_FLAG_LOCATION_SPIRIT_TOTEM_MOD = "spirit_flag_location_spirit_totem_mod"
     SPIRIT_FLAG_LOCATION_CUTSCENE_MOD = "spirit_flag_location_cutscene_mod"
     SPIRIT_FLAG_LOCATION_SAVE_LOAD_MOD = "spirit_flag_location_save_load_mod"
+    TOME_LOCATION_MOD = "tome_location_mod"
 
 class ItemTypes:
     Attack_Upgrade = "Attack Upgrade"

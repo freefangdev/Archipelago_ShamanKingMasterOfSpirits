@@ -610,6 +610,7 @@ class MemoryLocations:
             MemoryLocation(MemoryKeys.SPIRIT_FLAG_LOCATION_SPIRIT_TOTEM_MOD,   0x53a0,  1, MemoryDomainKeys.ROM),
             MemoryLocation(MemoryKeys.SPIRIT_FLAG_LOCATION_CUTSCENE_MOD,       0x8724,  1, MemoryDomainKeys.ROM),
             MemoryLocation(MemoryKeys.SPIRIT_FLAG_LOCATION_SAVE_LOAD_MOD,      0x1fc70, 1, MemoryDomainKeys.ROM),
+            MemoryLocation(MemoryKeys.TOME_LOCATION_MOD,                       0x7d5a, 10, MemoryDomainKeys.ROM),
         ]
 
         # Create lookup dictionary for easy access
