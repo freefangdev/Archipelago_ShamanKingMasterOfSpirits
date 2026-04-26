@@ -161,7 +161,7 @@ class Names:
         Golden_Thunder_Impalement = "Golden Thunder Impalement"
         
         # Bosses
-        Boss = "Boss",
+        Boss = "Boss"
         Ryo_Boss = f"{Ryo} {Boss}"
         Trey_Boss = f"{Trey} {Boss}"
         Eliza_Boss = f"{Eliza} {Boss}"
@@ -187,7 +187,7 @@ class Names:
         Thunder_Sword_Event = f"{Thunder_Sword} {Event}"
         Mash_Event = f"{Mash} {Event}"
         Zenki_and_Kohki_Event = f"{Zenki} and {Kohki} {Event}"
-        Spirit_of_Fire_Event = f"{Spirit_of_Fire} {Event}"
+        Spirit_of_Fire_or_Game_complete_Event = f"{Spirit_of_Fire} {Event}"
 
         #Flags
         Chest = "Chest"
@@ -369,7 +369,7 @@ class MemoryKeys:
     SPIRIT_FLAG_LOCATION_SPIRIT_TOTEM_MOD = "spirit_flag_location_spirit_totem_mod"
     SPIRIT_FLAG_LOCATION_CUTSCENE_MOD = "spirit_flag_location_cutscene_mod"
     SPIRIT_FLAG_LOCATION_SAVE_LOAD_MOD = "spirit_flag_location_save_load_mod"
-    TOME_LOCATION_MOD = "tome_location_mod"
+    #TOME_LOCATION_MOD = "tome_location_mod" #Possibly remove, just check boss kill flag
 
 class ItemTypes:
     Attack_Upgrade = "Attack Upgrade"

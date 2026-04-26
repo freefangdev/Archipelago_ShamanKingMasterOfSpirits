@@ -43,7 +43,7 @@ def create_regular_locations(world: ShamanKingMasterOfSpiritsWorld) -> None:
     regions = world.get_regions()
     
     for region in regions:
-        region.add_locations(get_location_names_with_ids([flag.name for flag in location_table if flag.name.startswith(region.name)]), ShamanKingMasterOfSpiritsLocation)
+        region.add_locations(get_location_names_with_ids([flag.name for flag in location_table if (flag.name.startswith(region.name) or region.name == Names.Inn)]), ShamanKingMasterOfSpiritsLocation)
 
     # One way to create locations is by just creating them directly via their constructor.
     #bottom_left_chest = ShamanKingMasterOfSpiritsLocation(

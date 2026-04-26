@@ -160,7 +160,7 @@ eventData = [
     EventData(Names.Thunder_Sword_Event,     lvl.Inn, "Boss",    [Names.Len_Tao_Boss, Names.En_Tao_Boss], Names.Thunder_Sword),
     EventData(Names.Mash_Event,              lvl.Inn, "Boss",    Names.Michael_Boss, Names.Mash),
     EventData(Names.Zenki_and_Kohki_Event,   lvl.IL2, None,      None,    [Names.Zenki, Names.Konchi]),
-    EventData(Names.Spirit_of_Fire_Event,    lvl.IL3, "Credits", Names.Mephias_Boss, Names.Spirit_of_Fire),
+    EventData(Names.Spirit_of_Fire_or_Game_complete_Event, lvl.IL3, "Credits", Names.Mephias_Boss, Names.Spirit_of_Fire),
 ]
 
 class SpiritData:
@@ -240,7 +240,7 @@ spiritData = [
     SpiritData(64, Names.Magnescope,       1,       ItemClassification.useful,          lvl.EC4),
     SpiritData(65, Names.Mama,             4,       ItemClassification.progression,     lvl.IL1),
     SpiritData(66, Names.Cifer,            60,      ItemClassification.useful,          lvl.IL1),
-    SpiritData(67, Names.Spirit_of_Fire,   None,    ItemClassification.useful,          event = Names.Spirit_of_Fire_Event),
+    SpiritData(67, Names.Spirit_of_Fire, None, ItemClassification.useful, event = Names.Spirit_of_Fire_or_Game_complete_Event),
     SpiritData(68, Names.Matamune,         160,     ItemClassification.useful,          lvl.IL2),
 ]
 
@@ -409,6 +409,11 @@ itemData = [
 
 itemDataDict = {item.name: item for item in itemData}
 
+class FlagType:
+    Event_Completed = "Event Completed"
+    Boss_Started = "Boss Started"
+    Boss_Completed = "Boss Completed"
+
 class FlagData:
     def __init__(self, name, address, address_offset, bit, flag_type = "Collected"):
         self.name = name
@@ -418,43 +423,43 @@ class FlagData:
         self.flagType = flag_type
         
 storyFlags = [
-    FlagData(Names.Intro,                   0x1e30, 0, 1, "Completed"),
-    FlagData(Names.Ryo_Boss,                0x1e30, 0, 2, "Available"),
-    FlagData(Names.Ryo_Boss,                0x1e30, 0, 3, "Completed"),
-    FlagData(Names.Shikigami_Event,         0x1e30, 0, 4, "Completed"),#Available/Completed?
-    FlagData(Names.Trey_Boss,               0x1e30, 0, 5, "Available"),
-    FlagData(Names.Trey_Boss,               0x1e30, 0, 6, "Completed"),
-    FlagData(Names.Eliza_Boss,              0x1e30, 0, 7, "Available"),
+    FlagData(Names.Intro,                   0x1e30, 0, 1, FlagType.Event_Completed),
+    FlagData(Names.Ryo_Boss,                0x1e30, 0, 2, FlagType.Boss_Started),
+    FlagData(Names.Ryo_Boss,                0x1e30, 0, 3, FlagType.Boss_Completed),
+    FlagData(Names.Shikigami_Event,         0x1e30, 0, 4, FlagType.Event_Completed),#Available/Completed?
+    FlagData(Names.Trey_Boss,               0x1e30, 0, 5, FlagType.Boss_Started),
+    FlagData(Names.Trey_Boss,               0x1e30, 0, 6, FlagType.Boss_Completed),
+    FlagData(Names.Eliza_Boss,              0x1e30, 0, 7, FlagType.Boss_Started),
 
-    FlagData(Names.Eliza_Boss,              0x1e31, 1, 0, "Completed"),
-    FlagData(Names.Light_Sword_Event,       0x1e31, 1, 1, "Completed"),
-    FlagData(Names.Silva_Boss,              0x1e31, 1, 2, "Available"),
-    FlagData(Names.Silva_Boss,              0x1e31, 1, 3, "Completed"),
-    FlagData(Names.Joco_Boss,               0x1e31, 1, 4, "Completed"),
-    FlagData(Names.Joco_Boss,               0x1e31, 1, 5, "Available"),
-    FlagData(Names.Ponchi_and_Konchi_Event, 0x1e31, 1, 6, "Completed"),
-    FlagData(Names.Lee_Pai_Long_Boss,       0x1e31, 1, 7, "Available"),
+    FlagData(Names.Eliza_Boss,              0x1e31, 1, 0, FlagType.Boss_Completed),
+    FlagData(Names.Light_Sword_Event,       0x1e31, 1, 1, FlagType.Event_Completed),
+    FlagData(Names.Silva_Boss,              0x1e31, 1, 2, FlagType.Boss_Started),
+    FlagData(Names.Silva_Boss,              0x1e31, 1, 3, FlagType.Boss_Completed),
+    FlagData(Names.Joco_Boss,               0x1e31, 1, 4, FlagType.Boss_Started),
+    FlagData(Names.Joco_Boss,               0x1e31, 1, 5, FlagType.Boss_Completed),
+    FlagData(Names.Ponchi_and_Konchi_Event, 0x1e31, 1, 6, FlagType.Event_Completed),
+    FlagData(Names.Lee_Pai_Long_Boss,       0x1e31, 1, 7, FlagType.Boss_Started),
 
-    FlagData(Names.Lee_Pai_Long_Boss,       0x1e32, 2, 0, "Completed"),
-    FlagData(Names.Mosuke_Event,            0x1e32, 2, 1, "Completed"),
-    FlagData(Names.Len_Tao_Boss,            0x1e32, 2, 2, "Available"),
-    FlagData(Names.Len_Tao_Boss,            0x1e32, 2, 3, "Completed"),
-    FlagData(Names.Zenki_and_Kohki_Event,   0x1e32, 2, 4, "Completed"),
-    FlagData(Names.En_Tao_Boss,             0x1e32, 2, 5, "Available"),
-    FlagData(Names.En_Tao_Boss,             0x1e32, 2, 6, "Completed"),
-    FlagData(Names.Thunder_Sword_Event,     0x1e32, 2, 7, "Completed"),
+    FlagData(Names.Lee_Pai_Long_Boss,       0x1e32, 2, 0, FlagType.Boss_Completed),
+    FlagData(Names.Mosuke_Event,            0x1e32, 2, 1, FlagType.Event_Completed),
+    FlagData(Names.Len_Tao_Boss,            0x1e32, 2, 2, FlagType.Boss_Started),
+    FlagData(Names.Len_Tao_Boss,            0x1e32, 2, 3, FlagType.Boss_Completed),
+    FlagData(Names.Zenki_and_Kohki_Event,   0x1e32, 2, 4, FlagType.Event_Completed),
+    FlagData(Names.En_Tao_Boss,             0x1e32, 2, 5, FlagType.Boss_Started),
+    FlagData(Names.En_Tao_Boss,             0x1e32, 2, 6, FlagType.Boss_Completed),
+    FlagData(Names.Thunder_Sword_Event,     0x1e32, 2, 7, FlagType.Event_Completed),
 
-    FlagData(Names.Lyzerg_Boss,             0x1e33, 3, 0, "Available"),
-    FlagData(Names.Lyzerg_Boss,             0x1e33, 3, 1, "Completed"),
-    FlagData(Names.Antiquity_Event,         0x1e33, 3, 2, "Completed"),
-    FlagData(Names.Michael_Boss,            0x1e33, 3, 3, "Available"),
-    FlagData(Names.Michael_Boss,            0x1e33, 3, 4, "Completed"),
-    FlagData(Names.Mash_Event,              0x1e33, 3, 5, "Completed"),
-    FlagData(Names.Magister_Boss,           0x1e33, 3, 6, "Available"),
-    FlagData(Names.Magister_Boss,           0x1e33, 3, 7, "Completed"),
+    FlagData(Names.Lyzerg_Boss,             0x1e33, 3, 0, FlagType.Boss_Started),
+    FlagData(Names.Lyzerg_Boss,             0x1e33, 3, 1, FlagType.Boss_Completed),
+    FlagData(Names.Antiquity_Event,         0x1e33, 3, 2, FlagType.Event_Completed),
+    FlagData(Names.Michael_Boss,            0x1e33, 3, 3, FlagType.Boss_Started),
+    FlagData(Names.Michael_Boss,            0x1e33, 3, 4, FlagType.Boss_Completed),
+    FlagData(Names.Mash_Event,              0x1e33, 3, 5, FlagType.Event_Completed),
+    FlagData(Names.Magister_Boss,           0x1e33, 3, 6, FlagType.Boss_Started),
+    FlagData(Names.Magister_Boss,           0x1e33, 3, 7, FlagType.Boss_Completed),
 
-    FlagData(Names.Mephias_Boss,            0x1e34, 4, 0, "Completed"),
-    FlagData(Names.Spirit_of_Fire_Event,    0x1e34, 4, 1, "Completed"),
+    FlagData(Names.Mephias_Boss,            0x1e34, 4, 0, FlagType.Boss_Completed),
+    FlagData(Names.Spirit_of_Fire_or_Game_complete_Event, 0x1e34, 4, 1, FlagType.Event_Completed),
 ]
 
 spiritCollectionFlags = [
@@ -594,7 +599,7 @@ class MemoryLocations:
             #Flags
             MemoryLocation(MemoryKeys.ITEM_FLAGS,                 0x1ea8,     905, MemoryDomainKeys.IWRAM),
             MemoryLocation(MemoryKeys.KEY_FLAGS,                  0x1dde,     87, MemoryDomainKeys.IWRAM),
-            MemoryLocation(MemoryKeys.SPIRIT_FLAGS,               0x232c,     9, MemoryDomainKeys.IWRAM), #Originally from 0x235b
+            MemoryLocation(MemoryKeys.SPIRIT_FLAGS,               0x232c,     10, MemoryDomainKeys.IWRAM), #Originally from 0x235b
 
             #Mods
             MemoryLocation(MemoryKeys.TOTEM_SPIRIT_LOCATION_MOD_1,          0x535e,     2, MemoryDomainKeys.ROM),
@@ -610,7 +615,7 @@ class MemoryLocations:
             MemoryLocation(MemoryKeys.SPIRIT_FLAG_LOCATION_SPIRIT_TOTEM_MOD,   0x53a0,  1, MemoryDomainKeys.ROM),
             MemoryLocation(MemoryKeys.SPIRIT_FLAG_LOCATION_CUTSCENE_MOD,       0x8724,  1, MemoryDomainKeys.ROM),
             MemoryLocation(MemoryKeys.SPIRIT_FLAG_LOCATION_SAVE_LOAD_MOD,      0x1fc70, 1, MemoryDomainKeys.ROM),
-            MemoryLocation(MemoryKeys.TOME_LOCATION_MOD,                       0x7d5a, 10, MemoryDomainKeys.ROM),
+            #MemoryLocation(MemoryKeys.TOME_LOCATION_MOD,                       0x7d5a, 10, MemoryDomainKeys.ROM),
         ]
 
         # Create lookup dictionary for easy access
@@ -978,6 +983,6 @@ spirit_location_flags = [
     FlagData(f"{lvl.EC4} {Names.Magnescope}",                       0x2335, 9, 0),
     FlagData(f"{lvl.IL1} {Names.Mama}",                             0x2335, 9, 1),
     FlagData(f"{lvl.IL1} {Names.Cifer}",                            0x2335, 9, 2),
-    FlagData(f"{lvl.IL3} {Names.Spirit_of_Fire_Event} {Names.Spirit_of_Fire}",0x2335, 9, 3),
+    FlagData(f"{lvl.IL3} {Names.Spirit_of_Fire_or_Game_complete_Event} {Names.Spirit_of_Fire}", 0x2335, 9, 3),
     FlagData(f"{lvl.IL2} {Names.Matamune}",                         0x2335, 9, 4),
 ]

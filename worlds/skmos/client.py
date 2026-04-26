@@ -87,20 +87,20 @@ def apply_mods(writes) -> None:
     writes.append(memory_locations.make_write(MemoryKeys.KEY_COLLECTION_BIT_MOD, 16))
     #Change location spirit collection writes from 235b to 232c in order to separate spirit location to spirit in inventory  
     for spirit_flag_mod in spirit_flag_mods:
-        writes.append(memory_locations.make_write(spirit_flag_mod, 60))
+        writes.append(memory_locations.make_write(spirit_flag_mod, 0x60))
     #Change tome save location/mechanism
     #Todo replace with non-locking fix
-    writes.append(memory_locations.make_write(MemoryKeys.TOME_LOCATION_MOD, 0xAF352C7801342C7082E0))
+    #writes.append(memory_locations.make_write(MemoryKeys.TOME_LOCATION_MOD, 0xAF352C7801342C7082E0))
     #Loaded message in map scroller
     writes.append((0x267D40, b"Archipelago loaded successfully!", "ROM"))
     
 def apply_options(writes, options) -> None:
-    if options[Options.Early_Totem_Spirit_Locations] == 1:
+    #if options[Options.Early_Totem_Spirit_Locations] == 1: #Todo: figure out options
         #Enable Totem Spirit locations before Silva/Silver boss
         writes.append(memory_locations.make_write(MemoryKeys.TOTEM_SPIRIT_LOCATION_MOD_1, 0))
         writes.append(memory_locations.make_write(MemoryKeys.TOTEM_SPIRIT_LOCATION_MOD_2, 0))
         
-    if options[Options.Disable_Splash_Art_When_Using_Spirits] == 1:
+    #if options[Options.Disable_Splash_Art_When_Using_Spirits] == 1:
         #Disable random spirit splash effect
         writes.append(memory_locations.make_write(MemoryKeys.DISABLE_SPIRIT_SPLASH, 0))
 
@@ -326,6 +326,8 @@ class ShamanKingMasterOfSpiritsClient(BizHawkClient):
                 is_checked = self.is_bit_set(spirit_flags_bytes[spirit_location.address_offset], spirit_location.bit)
                 if is_checked:
                     new_checks.append(location_id)
+
+        #Handle boss & event checks
 
         for new_check_id in new_checks:
             ctx.locations_checked.add(new_check_id)
