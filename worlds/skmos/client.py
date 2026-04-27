@@ -1,7 +1,7 @@
 ﻿import logging
 from typing import TYPE_CHECKING, Dict, Any
 from worlds._bizhawk.client import BizHawkClient
-from worlds._bizhawk import RequestFailedError, read, write
+from worlds._bizhawk import RequestFailedError, read, write, display_message
 from .game_data import traps, collectible_location_flags, key_location_flags, boss_and_event_location_flags, spirit_location_flags, spiritSlotFlagDict, spiritCollectionFlagDict, itemDataDict, ItemData, MemoryLocations, FlagData, weapon_progression_dict, defence_progression_dict, SpiritData, itemData, chest_addresses
 from .items import ITEM_ID_TO_ITEM
 from .names import ItemTypes, MemoryKeys, MemoryDomainKeys, Names, Options, spirit_flag_mods
@@ -33,6 +33,7 @@ class State:
         self.bag_items_to_add:list[str] = []
         self.weapons_to_add:list[str] = []
         self.defence_to_add:list[str] = []
+        self.messages_to_display:list[str] = []
 
     def reset(self):
         self.__init__()
@@ -236,6 +237,7 @@ class ShamanKingMasterOfSpiritsClient(BizHawkClient):
         for i, item in enumerate(ctx.items_received[state.receive_amount:]):
             item_id = item.item
             item_received = ITEM_ID_TO_ITEM[item_id]
+            state.messages_to_display.append(f"Received {item_received.name}")
             if isinstance(item_received, SpiritData):
                 state.spirits_to_add.append(item_received.name)
             elif isinstance(item_received, ItemData):
@@ -304,9 +306,6 @@ class ShamanKingMasterOfSpiritsClient(BizHawkClient):
 
         await write(ctx.bizhawk_ctx, writes)
         
-        state.reset()
-        state.receive_amount = len(ctx.items_received)
-        
         new_checks = []
 
         #Handle chest and other in-level collectible checks
@@ -315,6 +314,7 @@ class ShamanKingMasterOfSpiritsClient(BizHawkClient):
             if location_id not in ctx.checked_locations:
                 is_checked = self.is_bit_set(item_flags_bytes[collection_location.address_offset], collection_location.bit)
                 if is_checked:
+                    #Todo message on send item
                     new_checks.append(location_id)
 
         #Handle key checks
@@ -345,6 +345,12 @@ class ShamanKingMasterOfSpiritsClient(BizHawkClient):
         for new_check_id in new_checks:
             ctx.locations_checked.add(new_check_id)
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [new_check_id]}])
+        
+        for message in state.messages_to_display:
+            await display_message(ctx.bizhawk_ctx, message)
+
+        state.reset()
+        state.receive_amount = len(ctx.items_received)
 
     def trigger_traps(self, trap_names:list[str], writes: list[Any], yoh_object_pointer_iwram: int, screen_type_bytes: bytes):
         global state
