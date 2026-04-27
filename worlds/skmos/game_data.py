@@ -601,21 +601,23 @@ class MemoryLocations:
             MemoryLocation(MemoryKeys.KEY_FLAGS,                  0x1dde,     87, MemoryDomainKeys.IWRAM),
             MemoryLocation(MemoryKeys.SPIRIT_FLAGS,               0x232c,     10, MemoryDomainKeys.IWRAM), #Originally from 0x235b
 
-            #Mods
+            #Settings
             MemoryLocation(MemoryKeys.TOTEM_SPIRIT_LOCATION_MOD_1,          0x535e,     2, MemoryDomainKeys.ROM),
             MemoryLocation(MemoryKeys.TOTEM_SPIRIT_LOCATION_MOD_2,          0x536c,     2, MemoryDomainKeys.ROM),
             MemoryLocation(MemoryKeys.DISABLE_SPIRIT_SPLASH,                0x16422,    4, MemoryDomainKeys.ROM),
+
+            #Mods
             MemoryLocation(MemoryKeys.DISABLE_VANILLA_HP_SP_PICKUP,         0x7c74,     2, MemoryDomainKeys.ROM),
             MemoryLocation(MemoryKeys.DISABLE_VANILLA_SPIRIT_SLOT_PICKUP,   0x7c7c,     2, MemoryDomainKeys.ROM),
             MemoryLocation(MemoryKeys.DISABLE_GROUNDED_PICKUP_MESSAGE,      0x6544,     2, MemoryDomainKeys.ROM),
             MemoryLocation(MemoryKeys.KEY_COLLECTION_BIT_MOD,               0x17000,    1, MemoryDomainKeys.ROM),
+            MemoryLocation(MemoryKeys.TOME_SOFTLOCK_FIX, 0x3bde8, 2, MemoryDomainKeys.ROM),
 
             MemoryLocation(MemoryKeys.SPIRIT_FLAG_LOCATION_REGULAR_MOD,        0x8464,  1, MemoryDomainKeys.ROM),
             MemoryLocation(MemoryKeys.SPIRIT_FLAG_LOCATION_ENEMY_DROP_MOD,     0x6330,  1, MemoryDomainKeys.ROM),
             MemoryLocation(MemoryKeys.SPIRIT_FLAG_LOCATION_SPIRIT_TOTEM_MOD,   0x53a0,  1, MemoryDomainKeys.ROM),
             MemoryLocation(MemoryKeys.SPIRIT_FLAG_LOCATION_CUTSCENE_MOD,       0x8724,  1, MemoryDomainKeys.ROM),
             MemoryLocation(MemoryKeys.SPIRIT_FLAG_LOCATION_SAVE_LOAD_MOD,      0x1fc70, 1, MemoryDomainKeys.ROM),
-            #MemoryLocation(MemoryKeys.TOME_LOCATION_MOD,                       0x7d5a, 10, MemoryDomainKeys.ROM),
         ]
 
         # Create lookup dictionary for easy access

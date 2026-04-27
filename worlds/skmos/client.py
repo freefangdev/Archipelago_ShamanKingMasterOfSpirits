@@ -88,9 +88,8 @@ def apply_mods(writes) -> None:
     #Change location spirit collection writes from 235b to 232c in order to separate spirit location to spirit in inventory  
     for spirit_flag_mod in spirit_flag_mods:
         writes.append(memory_locations.make_write(spirit_flag_mod, 0x60))
-    #Change tome save location/mechanism
-    #Todo replace with non-locking fix
-    #writes.append(memory_locations.make_write(MemoryKeys.TOME_LOCATION_MOD, 0xAF352C7801342C7082E0))
+    #Fix tome getting animation when disabling receiving the actual item
+    writes.append(memory_locations.make_write(MemoryKeys.TOME_SOFTLOCK_FIX, 0))
     #Loaded message in map scroller
     writes.append((0x267D40, b"Archipelago loaded successfully!", "ROM"))
     
