@@ -618,6 +618,10 @@ class MemoryLocations:
             MemoryLocation(MemoryKeys.SPIRIT_FLAG_LOCATION_SPIRIT_TOTEM_MOD,   0x53a0,  1, MemoryDomainKeys.ROM),
             MemoryLocation(MemoryKeys.SPIRIT_FLAG_LOCATION_CUTSCENE_MOD,       0x8724,  1, MemoryDomainKeys.ROM),
             MemoryLocation(MemoryKeys.SPIRIT_FLAG_LOCATION_SAVE_LOAD_MOD,      0x1fc70, 1, MemoryDomainKeys.ROM),
+            MemoryLocation(MemoryKeys.DISABLE_STARTING_SPIRIT_SLOT_UNLOCK,     0x8f16,  2, MemoryDomainKeys.ROM),
+            MemoryLocation(MemoryKeys.DISABLE_SET_STARTING_SWORD,              0x8f22,  4, MemoryDomainKeys.ROM),
+            MemoryLocation(MemoryKeys.DISABLE_SET_STARTING_SPIRIT,             0x8f1e,  2, MemoryDomainKeys.ROM),
+            MemoryLocation(MemoryKeys.DISABLE_EQUIP_STARTING_SPIRIT,           0x8f30,  4, MemoryDomainKeys.ROM),
         ]
 
         # Create lookup dictionary for easy access
@@ -700,6 +704,7 @@ collectible_location_flags = [
     FlagData(f"{Names.Eastern_Cemetery} {Names.Chest} 19",0x1eb0, 0x1eb0 - 0x1ea8, 5, Names.Chest),
     FlagData(f"{Names.Eastern_Cemetery} {Names.Chest} 20",0x1eb0, 0x1eb0 - 0x1ea8, 6, Names.Chest),
     FlagData(f"{Names.Eastern_Cemetery} {Names.Chest} 21",0x1eb0, 0x1eb0 - 0x1ea8, 7, Names.Chest),
+    #Todo: Add more?
     FlagData(f"{Names.Eastern_Cemetery} {Names.Magatama_Bead} 3",0x1eb4, 0x1eb4 - 0x1ea8, 0, Names.Magatama_Bead),
     FlagData(f"{Names.Northern_Fields} {Names.Chest} 1",0x1f28, 0x1f28 - 0x1ea8, 0, Names.Chest), 
     FlagData(f"{Names.Northern_Fields} {Names.Chest} 2",0x1f28, 0x1f28 - 0x1ea8, 1, Names.Chest), 
@@ -987,4 +992,23 @@ spirit_location_flags = [
     FlagData(f"{lvl.IL1} {Names.Cifer}",                            0x2335, 9, 2),
     FlagData(f"{lvl.IL3} {Names.Spirit_of_Fire_or_Game_complete_Event} {Names.Spirit_of_Fire}", 0x2335, 9, 3),
     FlagData(f"{lvl.IL2} {Names.Matamune}",                         0x2335, 9, 4),
+]
+
+#Ignoring spirit rewards since they are handled along with the regular spirits
+boss_and_event_location_flags = [
+    FlagData(f"{Names.Ryo_Boss} {Names.Tome_Page}",                0x1e30, 0, 3, FlagType.Boss_Completed),
+    FlagData(f"{Names.Shikigami_Event} {Names.Tome_Page}",         0x1e30, 0, 4, FlagType.Event_Completed),
+    FlagData(f"{Names.Trey_Boss} {Names.Tome_Page}",               0x1e30, 0, 6, FlagType.Boss_Completed),
+    FlagData(f"{Names.Eliza_Boss} {Names.Tome_Page}",              0x1e31, 1, 0, FlagType.Boss_Completed),
+    FlagData(f"{Names.Light_Sword_Event} {Names.Light_Sword}",     0x1e31, 1, 1, FlagType.Event_Completed),
+    FlagData(f"{Names.Silva_Boss} {Names.Tome_Page}",              0x1e31, 1, 3, FlagType.Boss_Completed),
+    FlagData(f"{Names.Joco_Boss} {Names.Tome_Page}",               0x1e31, 1, 5, FlagType.Boss_Completed),
+    FlagData(f"{Names.Lee_Pai_Long_Boss} {Names.Tome_Page}",       0x1e32, 2, 0, FlagType.Boss_Completed),
+    FlagData(f"{Names.Len_Tao_Boss} {Names.Tome_Page}",            0x1e32, 2, 3, FlagType.Boss_Completed),
+    FlagData(f"{Names.En_Tao_Boss} {Names.Tome_Page}",             0x1e32, 2, 6, FlagType.Boss_Completed),
+    FlagData(f"{Names.Thunder_Sword_Event} {Names.Thunder_Sword}", 0x1e32, 2, 7, FlagType.Event_Completed),
+    FlagData(f"{Names.Lyzerg_Boss} {Names.Tome_Page}",             0x1e33, 3, 1, FlagType.Boss_Completed),
+    FlagData(f"{Names.Antiquity_Event} {Names.Antiquity}",         0x1e33, 3, 2, FlagType.Event_Completed),
+    FlagData(f"{Names.Michael_Boss} {Names.Tome_Page}",            0x1e33, 3, 4, FlagType.Boss_Completed),
+    FlagData(f"{Names.Magister_Boss} {Names.Tome_Page}",           0x1e33, 3, 7, FlagType.Boss_Completed),
 ]

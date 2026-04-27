@@ -370,6 +370,10 @@ class MemoryKeys:
     SPIRIT_FLAG_LOCATION_CUTSCENE_MOD = "spirit_flag_location_cutscene_mod"
     SPIRIT_FLAG_LOCATION_SAVE_LOAD_MOD = "spirit_flag_location_save_load_mod"
     TOME_SOFTLOCK_FIX = "tome_softlock_fix"
+    DISABLE_SET_STARTING_SPIRIT = "disable_set_starting_spirit"
+    DISABLE_EQUIP_STARTING_SPIRIT = "disable_equip_starting_spirit"
+    DISABLE_STARTING_SPIRIT_SLOT_UNLOCK = "disable_starting_spirit_slot_unlock"
+    DISABLE_SET_STARTING_SWORD = "disable_set_starting_sword"
 
 class ItemTypes:
     Attack_Upgrade = "Attack Upgrade"

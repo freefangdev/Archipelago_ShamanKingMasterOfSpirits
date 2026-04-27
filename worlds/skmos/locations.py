@@ -2,14 +2,14 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 from BaseClasses import ItemClassification, Location
-from .game_data import spiritData, itemData, collectible_location_flags, key_location_flags, spirit_location_flags
+from .game_data import spiritData, itemData, collectible_location_flags, key_location_flags, spirit_location_flags, boss_and_event_location_flags
 from .names import Names
 
 if TYPE_CHECKING:
     from .skmosworld import ShamanKingMasterOfSpiritsWorld
 
 item_table = spiritData + itemData
-location_table = collectible_location_flags + key_location_flags + spirit_location_flags
+location_table = collectible_location_flags + key_location_flags + spirit_location_flags + boss_and_event_location_flags
 
 LOCATION_NAME_TO_ID = {location.name: i+1 for i, location in enumerate(location_table)}
 

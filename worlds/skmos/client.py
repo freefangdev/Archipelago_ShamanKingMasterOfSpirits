@@ -2,7 +2,7 @@
 from typing import TYPE_CHECKING, Dict, Any
 from worlds._bizhawk.client import BizHawkClient
 from worlds._bizhawk import RequestFailedError, read, write
-from .game_data import traps, collectible_location_flags, key_location_flags, spirit_location_flags, spiritSlotFlagDict, spiritCollectionFlagDict, itemDataDict, ItemData, MemoryLocations, FlagData, weapon_progression_dict, defence_progression_dict, SpiritData, itemData, chest_addresses
+from .game_data import traps, collectible_location_flags, key_location_flags, boss_and_event_location_flags, spirit_location_flags, spiritSlotFlagDict, spiritCollectionFlagDict, itemDataDict, ItemData, MemoryLocations, FlagData, weapon_progression_dict, defence_progression_dict, SpiritData, itemData, chest_addresses
 from .items import ITEM_ID_TO_ITEM
 from .names import ItemTypes, MemoryKeys, MemoryDomainKeys, Names, Options, spirit_flag_mods
 from .locations import LOCATION_NAME_TO_ID
@@ -89,7 +89,14 @@ def apply_mods(writes) -> None:
     for spirit_flag_mod in spirit_flag_mods:
         writes.append(memory_locations.make_write(spirit_flag_mod, 0x60))
     #Fix tome getting animation when disabling receiving the actual item
-    writes.append(memory_locations.make_write(MemoryKeys.TOME_SOFTLOCK_FIX, 0))
+    writes.append(memory_locations.make_write(MemoryKeys.TOME_SOFTLOCK_FIX, 0x0000)) #TODO: still broken?
+    #Adjust starting equipment
+    writes.append(memory_locations.make_write(MemoryKeys.DISABLE_EQUIP_STARTING_SPIRIT, 0x00))
+    writes.append(memory_locations.make_write(MemoryKeys.DISABLE_SET_STARTING_SPIRIT, 0x0000))
+    #TODO: Fix for break when pressing a on spirit menu
+    #writes.append(memory_locations.make_write(MemoryKeys.DISABLE_STARTING_SPIRIT_SLOT_UNLOCK, 0x00)) 
+    #TODO: Fix for break when attacking
+    #writes.append(memory_locations.make_write(MemoryKeys.DISABLE_SET_STARTING_SWORD, 0x0000))
     #Loaded message in map scroller
     writes.append((0x267D40, b"Archipelago loaded successfully!", "ROM"))
     
@@ -327,7 +334,14 @@ class ShamanKingMasterOfSpiritsClient(BizHawkClient):
                     new_checks.append(location_id)
 
         #Handle boss & event checks
+        for boss_and_event_location in boss_and_event_location_flags:
+            location_id = LOCATION_NAME_TO_ID[boss_and_event_location.name]
+            if location_id not in ctx.checked_locations:
+                is_checked = self.is_bit_set(spirit_flags_bytes[boss_and_event_location.address_offset], boss_and_event_location.bit)
+                if is_checked:
+                    new_checks.append(location_id)
 
+        #Send checks
         for new_check_id in new_checks:
             ctx.locations_checked.add(new_check_id)
             await ctx.send_msgs([{"cmd": 'LocationChecks', "locations": [new_check_id]}])
