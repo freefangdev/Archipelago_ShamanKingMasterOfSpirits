@@ -611,7 +611,8 @@ class MemoryLocations:
             MemoryLocation(MemoryKeys.DISABLE_VANILLA_SPIRIT_SLOT_PICKUP,   0x7c7c,     2, MemoryDomainKeys.ROM),
             MemoryLocation(MemoryKeys.DISABLE_GROUNDED_PICKUP_MESSAGE,      0x6544,     2, MemoryDomainKeys.ROM),
             MemoryLocation(MemoryKeys.KEY_COLLECTION_BIT_MOD,               0x17000,    1, MemoryDomainKeys.ROM),
-            MemoryLocation(MemoryKeys.TOME_SOFTLOCK_FIX, 0x3bde8, 2, MemoryDomainKeys.ROM),
+            MemoryLocation(MemoryKeys.TOME_SOFTLOCK_FIX_1,                  0x3bde8,    2, MemoryDomainKeys.ROM),
+            MemoryLocation(MemoryKeys.TOME_SOFTLOCK_FIX_2,                  0x3bda0,    4, MemoryDomainKeys.ROM),
 
             MemoryLocation(MemoryKeys.SPIRIT_FLAG_LOCATION_REGULAR_MOD,        0x8464,  1, MemoryDomainKeys.ROM),
             MemoryLocation(MemoryKeys.SPIRIT_FLAG_LOCATION_ENEMY_DROP_MOD,     0x6330,  1, MemoryDomainKeys.ROM),

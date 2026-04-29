@@ -87,13 +87,16 @@ def apply_mods(writes) -> None:
     #Separate key collection from having the key, move collection status to bit 4
     writes.append(memory_locations.make_write(MemoryKeys.KEY_COLLECTION_BIT_MOD, 16))
     #Change location spirit collection writes from 235b to 232c in order to separate spirit location to spirit in inventory  
+    #Todo: Check if space doesn't overlap with events, gussy kenjy seems to trigger thunder sword event flag
     for spirit_flag_mod in spirit_flag_mods:
         writes.append(memory_locations.make_write(spirit_flag_mod, 0x60))
-    #Fix tome getting animation when disabling receiving the actual item
-    writes.append(memory_locations.make_write(MemoryKeys.TOME_SOFTLOCK_FIX, 0x0000)) #TODO: still broken?
+    #Skip waiting on tome collection post-boss, this is detected by boss clear flags
+    writes.append(memory_locations.make_write(MemoryKeys.TOME_SOFTLOCK_FIX_1, 0))
+    #Skip spawning tome in post-boss sequence
+    writes.append(memory_locations.make_write(MemoryKeys.TOME_SOFTLOCK_FIX_2, 0))
     #Adjust starting equipment
-    writes.append(memory_locations.make_write(MemoryKeys.DISABLE_EQUIP_STARTING_SPIRIT, 0x00))
-    writes.append(memory_locations.make_write(MemoryKeys.DISABLE_SET_STARTING_SPIRIT, 0x0000))
+    writes.append(memory_locations.make_write(MemoryKeys.DISABLE_EQUIP_STARTING_SPIRIT, 0))
+    writes.append(memory_locations.make_write(MemoryKeys.DISABLE_SET_STARTING_SPIRIT, 0))
     #TODO: Fix for break when pressing a on spirit menu
     #writes.append(memory_locations.make_write(MemoryKeys.DISABLE_STARTING_SPIRIT_SLOT_UNLOCK, 0x00)) 
     #TODO: Fix for break when attacking
